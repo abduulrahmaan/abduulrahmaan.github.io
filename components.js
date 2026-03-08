@@ -54,9 +54,9 @@ function renderSEO(activePage) {
 function renderNav(activePage) {
   const pages = [
     { label: 'Home',     href: 'index.html' },
-    { label: 'About',    href: 'about.html' },
     { label: 'Services', href: 'services.html' },
     { label: 'Contact',  href: 'contact.html' },
+    { label: 'About',    href: 'about.html' },
   ];
 
   const links = pages.map(p => `
@@ -66,13 +66,13 @@ function renderNav(activePage) {
   document.getElementById('nav-placeholder').innerHTML = `
     <div class="mobile-menu" id="mobileMenu">
       ${pages.map(p => `<a href="${p.href}" onclick="closeMenu()">${p.label}</a>`).join('')}
-      <a href="contact.html" class="mobile-cta" onclick="closeMenu()">Get Started</a>
+      <a href="contact.html#contact-form" class="mobile-cta" onclick="closeMenu()">Get Started</a>
     </div>
     <nav>
       <a href="index.html" class="nav-logo"><img src="logo.png" alt="PurePulse" style="height:32px;width:32px;object-fit:contain;display:inline-block;vertical-align:middle;margin-right:8px;border-radius:50%;"/>PurePulse</a>
       <div class="nav-links">
         ${links}
-        <a href="contact.html" class="nav-cta">Get Started</a>
+        <a href="contact.html#contact-form" class="nav-cta">Get Started</a>
       </div>
       <button class="hamburger" id="hamburger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
@@ -244,9 +244,9 @@ function initScrollReveal() {
 function renderNav(activePage) {
   const pages = [
     { label: 'Home',     href: 'index.html' },
-    { label: 'About',    href: 'about.html' },
     { label: 'Services', href: 'services.html' },
     { label: 'Contact',  href: 'contact.html' },
+    { label: 'About',    href: 'about.html' },
   ];
 
   const links = pages.map(p => `
@@ -256,13 +256,13 @@ function renderNav(activePage) {
   document.getElementById('nav-placeholder').innerHTML = `
     <div class="mobile-menu" id="mobileMenu">
       ${pages.map(p => `<a href="${p.href}" onclick="closeMenu()">${p.label}</a>`).join('')}
-      <a href="contact.html" class="mobile-cta" onclick="closeMenu()">Get Started</a>
+      <a href="contact.html#contact-form" class="mobile-cta" onclick="closeMenu()">Get Started</a>
     </div>
     <nav>
       <a href="index.html" class="nav-logo"><img src="logo.png" alt="PurePulse" style="height:32px;width:32px;object-fit:contain;display:inline-block;vertical-align:middle;margin-right:8px;border-radius:50%;"/>PurePulse</a>
       <div class="nav-links">
         ${links}
-        <a href="contact.html" class="nav-cta">Get Started</a>
+        <a href="contact.html#contact-form" class="nav-cta">Get Started</a>
       </div>
       <button class="hamburger" id="hamburger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
