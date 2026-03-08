@@ -69,7 +69,7 @@ function renderNav(activePage) {
       <a href="contact.html" class="mobile-cta" onclick="closeMenu()">Get Started</a>
     </div>
     <nav>
-      <a href="index.html" class="nav-logo">PurePulse</a>
+      <a href="index.html" class="nav-logo"><img src="logo.png" alt="PurePulse" style="height:38px;width:auto;display:block;"/></a>
       <div class="nav-links">
         ${links}
         <a href="contact.html" class="nav-cta">Get Started</a>
@@ -87,7 +87,7 @@ function renderFooter() {
     <footer>
       <div class="footer-top">
         <div>
-          <a href="index.html" class="footer-logo">PurePulse</a>
+          <a href="index.html" class="footer-logo"><img src="logo.png" alt="PurePulse" style="height:52px;width:auto;display:block;"/></a>
           <p class="footer-tagline">Marketing & PR that moves at the speed of pulse.</p>
           <p class="footer-tagline" style="margin-top:6px;">Karachi, Pakistan</p>
         </div>
@@ -259,7 +259,7 @@ function renderNav(activePage) {
       <a href="contact.html" class="mobile-cta" onclick="closeMenu()">Get Started</a>
     </div>
     <nav>
-      <a href="index.html" class="nav-logo">PurePulse</a>
+      <a href="index.html" class="nav-logo"><img src="logo.png" alt="PurePulse" style="height:38px;width:auto;display:block;"/></a>
       <div class="nav-links">
         ${links}
         <a href="contact.html" class="nav-cta">Get Started</a>
@@ -277,7 +277,7 @@ function renderFooter() {
     <footer>
       <div class="footer-top">
         <div>
-          <a href="index.html" class="footer-logo">PurePulse</a>
+          <a href="index.html" class="footer-logo"><img src="logo.png" alt="PurePulse" style="height:52px;width:auto;display:block;"/></a>
           <p class="footer-tagline">Marketing & PR that moves at the speed of pulse.</p>
           <p class="footer-tagline" style="margin-top:6px;">Karachi, Pakistan</p>
         </div>
