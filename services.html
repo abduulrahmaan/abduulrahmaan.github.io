@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — PurePulse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #080808;
+      --white: #f5f2ec;
+      --pulse: #e8ff47;
+      --dim: #1a1a1a;
+      --mid: #2e2e2e;
+      --muted: #888;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: auto;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+    }
+    nav::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.97), transparent);
+      pointer-events: none;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      text-decoration: none;
+      position: relative;
+    }
+    .nav-links { display: flex; gap: 36px; position: relative; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-links a.active { color: var(--pulse); }
+    .nav-cta {
+      background: var(--pulse);
+      color: var(--black) !important;
+      padding: 8px 20px;
+      font-weight: 500 !important;
+      transition: background 0.2s, transform 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--white) !important; transform: scale(1.04); }
+
+    /* HAMBURGER */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 200;
+      position: relative;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block; width: 24px; height: 2px;
+      background: var(--white);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* MOBILE MENU */
+    .mobile-menu {
+      display: none;
+      position: fixed; inset: 0;
+      background: var(--black);
+      z-index: 150;
+      flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 32px;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3rem; letter-spacing: 0.1em;
+      color: var(--white); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--pulse); }
+    .mobile-menu .mobile-cta {
+      background: var(--pulse); color: var(--black) !important;
+      padding: 14px 48px; font-size: 2rem; margin-top: 8px;
+    }
+
+    /* PAGE HERO */
+    .page-hero {
+      padding: 180px 48px 100px;
+      position: relative; overflow: hidden;
+      border-bottom: 1px solid var(--mid);
+    }
+    .page-hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 60% at 80% 50%, rgba(232,255,71,0.06) 0%, transparent 70%);
+    }
+    .page-hero-ticker {
+      position: absolute; top: 50%; left: 0; right: 0;
+      transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(80px, 14vw, 200px);
+      color: rgba(255,255,255,0.025);
+      letter-spacing: 0.04em; white-space: nowrap;
+      user-select: none;
+      animation: ticker 20s linear infinite;
+    }
+    @keyframes ticker { from { transform: translateY(-50%) translateX(0); } to { transform: translateY(-50%) translateX(-50%); } }
+
+    .page-eyebrow {
+      font-size: 0.75rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--pulse);
+      margin-bottom: 20px; opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(56px, 9vw, 130px);
+      line-height: 0.92; letter-spacing: 0.02em;
+      max-width: 800px; opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+    .page-title em { font-style: normal; color: var(--pulse); }
+    .page-sub {
+      margin-top: 32px; max-width: 520px;
+      font-size: 1.05rem; line-height: 1.75;
+      color: rgba(245,242,236,0.6); opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MARQUEE STRIP */
+    .strip {
+      border-top: 1px solid var(--mid); border-bottom: 1px solid var(--mid);
+      overflow: hidden; padding: 14px 0; background: var(--dim);
+    }
+    .strip-inner { display: flex; gap: 48px; white-space: nowrap; animation: marquee 22s linear infinite; }
+    .strip-item {
+      font-family: 'Bebas Neue', sans-serif; font-size: 0.95rem;
+      letter-spacing: 0.2em; color: var(--muted);
+      display: flex; align-items: center; gap: 48px;
+    }
+    .strip-item span { color: var(--pulse); }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* SERVICES LIST */
+    .services-section { padding: 100px 48px; }
+
+    .service-block {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 0;
+      border-bottom: 1px solid var(--mid);
+      padding: 72px 0;
+      transition: background 0.3s;
+    }
+    .service-block:first-child { border-top: 1px solid var(--mid); }
+
+    .service-left {
+      padding-right: 48px;
+      border-right: 1px solid var(--mid);
+      position: relative;
+    }
+    .service-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem; letter-spacing: 0.2em;
+      color: var(--pulse); margin-bottom: 16px; opacity: 0.7;
+    }
+    .service-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem; letter-spacing: 0.04em;
+      line-height: 1; margin-bottom: 16px;
+    }
+    .service-tag {
+      display: inline-block;
+      font-size: 0.65rem; letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--black); background: var(--pulse);
+      padding: 4px 10px;
+    }
+
+    .service-right { padding-left: 64px; }
+    .service-desc {
+      font-size: 1rem; line-height: 1.8;
+      color: rgba(245,242,236,0.65);
+      margin-bottom: 40px; max-width: 560px;
+    }
+
+    .service-grid-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-bottom: 40px;
+    }
+
+    .deliverables h4, .process h4, .ideal h4 {
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--pulse);
+      margin-bottom: 16px;
+    }
+    .deliverables ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .deliverables ul li {
+      font-size: 0.85rem; line-height: 1.5;
+      color: rgba(245,242,236,0.75);
+      display: flex; align-items: flex-start; gap: 10px;
+    }
+    .deliverables ul li::before {
+      content: '→'; color: var(--pulse); flex-shrink: 0; font-size: 0.75rem; margin-top: 2px;
+    }
+
+    .process-steps { display: flex; flex-direction: column; gap: 12px; }
+    .process-step {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 16px;
+      border: 1px solid var(--mid);
+      transition: border-color 0.3s;
+    }
+    .service-block:hover .process-step { border-color: rgba(232,255,71,0.2); }
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; color: var(--pulse); flex-shrink: 0; line-height: 1;
+    }
+    .step-text { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+    .step-text strong { color: var(--white); font-weight: 500; display: block; margin-bottom: 2px; }
+
+    .ideal-tag {
+      display: inline-block;
+      font-size: 0.75rem; padding: 6px 14px;
+      border: 1px solid var(--mid); color: var(--muted);
+      margin: 4px 4px 4px 0;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .service-block:hover .ideal-tag { border-color: var(--pulse); color: var(--white); }
+
+    /* WHY US BAND */
+    .why-band {
+      background: var(--dim);
+      padding: 80px 48px;
+      border-top: 1px solid var(--mid);
+      border-bottom: 1px solid var(--mid);
+    }
+    .why-band-inner {
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 80px; align-items: start;
+    }
+    .why-label {
+      font-size: 0.7rem; letter-spacing: 0.25em;
+      text-transform: uppercase; color: var(--pulse); margin-bottom: 16px;
+    }
+    .why-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 3.5vw, 52px);
+      letter-spacing: 0.03em; line-height: 1;
+    }
+    .why-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+    }
+    .why-item {
+      padding: 28px 24px;
+      border: 1px solid var(--mid);
+      transition: border-color 0.3s, background 0.3s;
+    }
+    .why-item:hover { border-color: var(--pulse); background: rgba(232,255,71,0.03); }
+    .why-icon { font-size: 1.5rem; margin-bottom: 16px; }
+    .why-item h4 { font-size: 0.9rem; font-weight: 500; margin-bottom: 8px; }
+    .why-item p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+    /* CTA BAND */
+    .cta-band {
+      margin: 80px 48px;
+      background: var(--pulse);
+      padding: 72px 80px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 40px; position: relative; overflow: hidden;
+    }
+    .cta-band::after {
+      content: 'PUREPULSE';
+      position: absolute; right: -20px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10rem; color: rgba(0,0,0,0.06);
+      letter-spacing: 0.1em; pointer-events: none; white-space: nowrap;
+    }
+    .cta-band-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 4vw, 56px);
+      color: var(--black); line-height: 1; letter-spacing: 0.03em;
+    }
+    .cta-band-sub { font-size: 0.9rem; color: rgba(8,8,8,0.6); margin-top: 12px; max-width: 360px; }
+    .btn-dark {
+      background: var(--black); color: var(--pulse);
+      padding: 16px 40px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+      font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      text-decoration: none; white-space: nowrap; flex-shrink: 0;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-dark:hover { background: #111; transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer { padding: 72px 48px 40px; border-top: 1px solid var(--mid); }
+    .footer-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 64px; gap: 40px; }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; letter-spacing: 0.1em; color: var(--white); text-decoration: none; }
+    .footer-tagline { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
+    .footer-links { display: flex; gap: 64px; }
+    .footer-col h4 { font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pulse); margin-bottom: 20px; }
+    .footer-col a { display: block; color: var(--muted); text-decoration: none; font-size: 0.875rem; margin-bottom: 10px; transition: color 0.2s; }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--mid); padding-top: 32px; font-size: 0.75rem; color: var(--muted); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-hero { padding: 130px 24px 64px; }
+      .page-title { font-size: clamp(44px, 11vw, 80px); }
+      .services-section { padding: 64px 24px; }
+      .service-block { grid-template-columns: 1fr; padding: 48px 0; gap: 32px; }
+      .service-left { border-right: none; border-bottom: 1px solid var(--mid); padding-right: 0; padding-bottom: 32px; }
+      .service-right { padding-left: 0; }
+      .service-grid-inner { grid-template-columns: 1fr; gap: 24px; }
+      .why-band { padding: 64px 24px; }
+      .why-band-inner { grid-template-columns: 1fr; gap: 40px; }
+      .why-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+      .cta-band { margin: 0; padding: 48px 24px; flex-direction: column; text-align: center; }
+      .cta-band-sub { max-width: 100%; }
+      .btn-dark { width: 100%; text-align: center; padding: 16px 24px; }
+      footer { padding: 48px 24px 32px; }
+      .footer-top { flex-direction: column; gap: 32px; }
+      .footer-links { flex-wrap: wrap; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+    @media (max-width: 540px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .page-title { font-size: clamp(38px, 10vw, 60px); }
+      .service-name { font-size: 1.8rem; }
+    }
+
+    /* Scroll reveal */
+    .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.hidden { opacity: 0; transform: translateY(32px); }
+  </style>
+</head>
+<body>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" onclick="closeMenu()">Home</a>
+    <a href="about.html" onclick="closeMenu()">About</a>
+    <a href="services.html" onclick="closeMenu()">Services</a>
+    <a href="contact.html" onclick="closeMenu()">Contact</a>
+    <a href="contact.html" class="mobile-cta" onclick="closeMenu()">Get Started</a>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">PurePulse</a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html" class="active">Services</a>
+      <a href="contact.html">Contact</a>
+      <a href="contact.html" class="nav-cta">Get Started</a>
+    </div>
+    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div class="page-hero-ticker">SERVICES SERVICES SERVICES SERVICES SERVICES &nbsp;</div>
+    <p class="page-eyebrow">What We Do</p>
+    <h1 class="page-title">Full‑Funnel.<br/><em>Outcome</em><br/>Focused.</h1>
+    <p class="page-sub">Six integrated service lines built to win attention, shape reputation, and grow revenue for ambitious Pakistani brands.</p>
+  </section>
+
+  <!-- MARQUEE STRIP -->
+  <div class="strip">
+    <div class="strip-inner">
+      <div class="strip-item">Public Relations <span>✦</span></div>
+      <div class="strip-item">Performance Marketing <span>✦</span></div>
+      <div class="strip-item">Social & Creators <span>✦</span></div>
+      <div class="strip-item">Digital PR <span>✦</span></div>
+      <div class="strip-item">Brand & Content <span>✦</span></div>
+      <div class="strip-item">Reputation <span>✦</span></div>
+      <div class="strip-item">Public Relations <span>✦</span></div>
+      <div class="strip-item">Performance Marketing <span>✦</span></div>
+      <div class="strip-item">Social & Creators <span>✦</span></div>
+      <div class="strip-item">Digital PR <span>✦</span></div>
+      <div class="strip-item">Brand & Content <span>✦</span></div>
+      <div class="strip-item">Reputation <span>✦</span></div>
+    </div>
+  </div>
+
+  <!-- SERVICES LIST -->
+  <section class="services-section">
+
+    <!-- 01 Public Relations -->
+    <div class="service-block reveal">
+      <div class="service-left">
+        <p class="service-num">01</p>
+        <h3 class="service-name">Public Relations</h3>
+        <span class="service-tag">Earned Media</span>
+      </div>
+      <div class="service-right">
+        <p class="service-desc">We build and protect your brand's reputation through strategic media relationships, compelling storytelling, and proactive communications — so your name appears in the right places, at the right time.</p>
+        <div class="service-grid-inner">
+          <div class="deliverables">
+            <h4>What You Get</h4>
+            <ul>
+              <li>Media strategy & press office management</li>
+              <li>Thought leadership & executive profiling</li>
+              <li>Press releases & media pitching</li>
+              <li>Crisis communications & rapid response</li>
+            </ul>
+          </div>
+          <div class="process">
+            <h4>How We Do It</h4>
+            <div class="process-steps">
+              <div class="process-step">
+                <span class="step-num">01</span>
+                <div class="step-text"><strong>Audit & Strategy</strong>Map your reputation landscape and define narrative goals.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">02</span>
+                <div class="step-text"><strong>Story Development</strong>Craft compelling angles that journalists actually want to cover.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">03</span>
+                <div class="step-text"><strong>Pitch & Place</strong>Distribute to targeted media and track coverage earned.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ideal">
+          <h4>Ideal For</h4>
+          <span class="ideal-tag">Startups launching</span>
+          <span class="ideal-tag">Established brands</span>
+          <span class="ideal-tag">Crisis situations</span>
+          <span class="ideal-tag">Thought leaders</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 Social & Creators -->
+    <div class="service-block reveal">
+      <div class="service-left">
+        <p class="service-num">02</p>
+        <h3 class="service-name">Social & Creators</h3>
+        <span class="service-tag">Owned & Paid</span>
+      </div>
+      <div class="service-right">
+        <p class="service-desc">We build communities and convert audiences into loyal customers — through a blend of paid social, organic content, creator partnerships, and UGC engines that keep your brand top of mind.</p>
+        <div class="service-grid-inner">
+          <div class="deliverables">
+            <h4>What You Get</h4>
+            <ul>
+              <li>Paid & organic social media management</li>
+              <li>Influencer identification & campaign management</li>
+              <li>UGC strategy & content engine setup</li>
+              <li>Community management & engagement</li>
+            </ul>
+          </div>
+          <div class="process">
+            <h4>How We Do It</h4>
+            <div class="process-steps">
+              <div class="process-step">
+                <span class="step-num">01</span>
+                <div class="step-text"><strong>Audience Mapping</strong>Identify where your audience lives and what moves them.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">02</span>
+                <div class="step-text"><strong>Content & Creator Match</strong>Build a content calendar and source the right creators.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">03</span>
+                <div class="step-text"><strong>Launch & Optimise</strong>Run campaigns, track performance, and refine continuously.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ideal">
+          <h4>Ideal For</h4>
+          <span class="ideal-tag">D2C brands</span>
+          <span class="ideal-tag">E-commerce</span>
+          <span class="ideal-tag">FMCG companies</span>
+          <span class="ideal-tag">Lifestyle brands</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 Performance Marketing -->
+    <div class="service-block reveal">
+      <div class="service-left">
+        <p class="service-num">03</p>
+        <h3 class="service-name">Performance Marketing</h3>
+        <span class="service-tag">Revenue Driven</span>
+      </div>
+      <div class="service-right">
+        <p class="service-desc">Every rupee tracked, every campaign optimised. We run data-driven paid campaigns across search and social, backed by rigorous analytics and attribution — so you always know what's working and what isn't.</p>
+        <div class="service-grid-inner">
+          <div class="deliverables">
+            <h4>What You Get</h4>
+            <ul>
+              <li>Google & Meta paid advertising</li>
+              <li>Conversion rate optimisation (CRO)</li>
+              <li>Full-funnel analytics & attribution setup</li>
+              <li>Monthly performance reporting & insights</li>
+            </ul>
+          </div>
+          <div class="process">
+            <h4>How We Do It</h4>
+            <div class="process-steps">
+              <div class="process-step">
+                <span class="step-num">01</span>
+                <div class="step-text"><strong>Funnel Audit</strong>Identify leaks and opportunities in your existing funnel.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">02</span>
+                <div class="step-text"><strong>Campaign Build</strong>Launch targeted campaigns with clear KPIs and budgets.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">03</span>
+                <div class="step-text"><strong>Test & Scale</strong>A/B test creatives and scale what drives results.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ideal">
+          <h4>Ideal For</h4>
+          <span class="ideal-tag">Scale-ups</span>
+          <span class="ideal-tag">E-commerce stores</span>
+          <span class="ideal-tag">Lead gen businesses</span>
+          <span class="ideal-tag">SaaS products</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Digital PR -->
+    <div class="service-block reveal">
+      <div class="service-left">
+        <p class="service-num">04</p>
+        <h3 class="service-name">Digital PR</h3>
+        <span class="service-tag">SEO + Authority</span>
+      </div>
+      <div class="service-right">
+        <p class="service-desc">We build your brand's online authority through high-impact digital campaigns — earning backlinks, media mentions, and search visibility that compound over time and drive organic growth.</p>
+        <div class="service-grid-inner">
+          <div class="deliverables">
+            <h4>What You Get</h4>
+            <ul>
+              <li>Linkable asset creation & data-led campaigns</li>
+              <li>Newsjacking & reactive PR opportunities</li>
+              <li>Newsroom & SEO content strategy</li>
+              <li>High-authority backlink acquisition</li>
+            </ul>
+          </div>
+          <div class="process">
+            <h4>How We Do It</h4>
+            <div class="process-steps">
+              <div class="process-step">
+                <span class="step-num">01</span>
+                <div class="step-text"><strong>Topic Research</strong>Find data stories and angles journalists will link to.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">02</span>
+                <div class="step-text"><strong>Asset Creation</strong>Produce compelling, shareable content and campaigns.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">03</span>
+                <div class="step-text"><strong>Outreach & Placement</strong>Pitch to publications and secure high-authority coverage.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ideal">
+          <h4>Ideal For</h4>
+          <span class="ideal-tag">SEO-focused brands</span>
+          <span class="ideal-tag">New websites</span>
+          <span class="ideal-tag">Competitive industries</span>
+          <span class="ideal-tag">Tech companies</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 Brand & Content -->
+    <div class="service-block reveal">
+      <div class="service-left">
+        <p class="service-num">05</p>
+        <h3 class="service-name">Brand & Content</h3>
+        <span class="service-tag">Identity & Voice</span>
+      </div>
+      <div class="service-right">
+        <p class="service-desc">We give your brand a distinct, memorable voice — through sharp positioning, clear messaging frameworks, and high-quality content that resonates with your audience and drives action.</p>
+        <div class="service-grid-inner">
+          <div class="deliverables">
+            <h4>What You Get</h4>
+            <ul>
+              <li>Brand positioning & messaging strategy</li>
+              <li>Visual identity direction & guidelines</li>
+              <li>Content design, copywriting & production</li>
+              <li>Campaign concept & creative development</li>
+            </ul>
+          </div>
+          <div class="process">
+            <h4>How We Do It</h4>
+            <div class="process-steps">
+              <div class="process-step">
+                <span class="step-num">01</span>
+                <div class="step-text"><strong>Discovery Workshop</strong>Understand your audience, competitors, and goals.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">02</span>
+                <div class="step-text"><strong>Positioning & Voice</strong>Define what your brand stands for and how it sounds.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">03</span>
+                <div class="step-text"><strong>Content Rollout</strong>Produce and distribute brand content across channels.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ideal">
+          <h4>Ideal For</h4>
+          <span class="ideal-tag">Rebranding brands</span>
+          <span class="ideal-tag">New businesses</span>
+          <span class="ideal-tag">Product launches</span>
+          <span class="ideal-tag">Scaling companies</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 Reputation -->
+    <div class="service-block reveal">
+      <div class="service-left">
+        <p class="service-num">06</p>
+        <h3 class="service-name">Reputation</h3>
+        <span class="service-tag">Trust & Protection</span>
+      </div>
+      <div class="service-right">
+        <p class="service-desc">Your reputation is your most valuable asset. We monitor, manage, and strengthen how your brand is perceived — online and offline — turning reputation into a competitive advantage.</p>
+        <div class="service-grid-inner">
+          <div class="deliverables">
+            <h4>What You Get</h4>
+            <ul>
+              <li>24/7 brand monitoring & alert system</li>
+              <li>Review management & response strategy</li>
+              <li>Employee advocacy programme setup</li>
+              <li>Reputation policy & guidelines development</li>
+            </ul>
+          </div>
+          <div class="process">
+            <h4>How We Do It</h4>
+            <div class="process-steps">
+              <div class="process-step">
+                <span class="step-num">01</span>
+                <div class="step-text"><strong>Reputation Audit</strong>Assess your current online presence and sentiment.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">02</span>
+                <div class="step-text"><strong>Monitor & Protect</strong>Set up real-time alerts and response workflows.</div>
+              </div>
+              <div class="process-step">
+                <span class="step-num">03</span>
+                <div class="step-text"><strong>Build & Advocate</strong>Turn happy clients and employees into brand advocates.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ideal">
+          <h4>Ideal For</h4>
+          <span class="ideal-tag">Public figures</span>
+          <span class="ideal-tag">Established brands</span>
+          <span class="ideal-tag">Crisis recovery</span>
+          <span class="ideal-tag">Regulated industries</span>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- WHY PUREPULSE -->
+  <div class="why-band reveal">
+    <div class="why-band-inner">
+      <div>
+        <p class="why-label">Why PurePulse</p>
+        <h2 class="why-title">The Agency Difference.</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-item">
+          <div class="why-icon">⚡</div>
+          <h4>Speed of Pulse</h4>
+          <p>We move at the pace of news cycles and culture — never slow, always sharp.</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🎯</div>
+          <h4>Outcome Obsessed</h4>
+          <p>Every strategy is tied to real business results — not vanity metrics or pretty reports.</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🇵🇰</div>
+          <h4>Pakistan-First Insight</h4>
+          <p>We know the local media landscape, audience behaviour, and cultural nuances better than anyone.</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🔗</div>
+          <h4>Fully Integrated</h4>
+          <p>PR, performance, and content working together — no siloed thinking, just joined-up strategy.</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">📊</div>
+          <h4>Transparent Reporting</h4>
+          <p>Clear, honest reporting every month — you always know exactly what's happening and why.</p>
+        </div>
+        <div class="why-item">
+          <div class="why-icon">🤝</div>
+          <h4>True Partnership</h4>
+          <p>We embed into your team, not just manage a retainer. Your wins are our wins.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA BAND -->
+  <div class="cta-band reveal">
+    <div>
+      <h2 class="cta-band-title">Ready to Build<br/>Something Bold?</h2>
+      <p class="cta-band-sub">Tell us your goals and we'll put together the right service mix for your brand.</p>
+    </div>
+    <a href="contact.html" class="btn-dark">Start a Conversation →</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <a href="index.html" class="footer-logo">PurePulse</a>
+        <p class="footer-tagline">Marketing & PR that moves at the speed of pulse.</p>
+        <p class="footer-tagline" style="margin-top:6px;">Karachi, Pakistan</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Pages</h4>
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="services.html">Services</a>
+          <a href="contact.html">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <a href="services.html">Public Relations</a>
+          <a href="services.html">Performance Marketing</a>
+          <a href="services.html">Social & Creators</a>
+          <a href="services.html">Digital PR</a>
+          <a href="services.html">Brand & Content</a>
+          <a href="services.html">Reputation</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 PurePulse. All rights reserved.</span>
+      <span>Pakistan's boldest marketing & PR agency.</span>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('mobileMenu').classList.toggle('open');
+      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
+    }
+    function closeMenu() {
+      document.getElementById('hamburger').classList.remove('open');
+      document.getElementById('mobileMenu').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.querySelectorAll('.reveal').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(32px)';
+      el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+    });
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
