@@ -745,34 +745,7 @@
   <!-- FOOTER -->
   <div id="footer-placeholder"></div>
 
-  <script>
-    
-    
-    document.querySelectorAll('.reveal').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'translateY(32px)';
-      el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
-    });
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
-        }
-      });
-    }, { threshold: 0.05 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-  </script>
-
-  <script>
-    renderSEO('services.html');
-    renderNav('services.html');
-    renderFooter();
-    initScrollReveal();
-  </script>
-
-</html>
-
+  
   <script>
     renderSEO('services.html');
     renderNav('services.html');
