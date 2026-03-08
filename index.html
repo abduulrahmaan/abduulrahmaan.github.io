@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PurePulse — Marketing & PR Agency</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #080808;
+      --white: #f5f2ec;
+      --pulse: #e8ff47;
+      --dim: #1a1a1a;
+      --mid: #2e2e2e;
+      --muted: #888;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Custom cursor */
+    .cursor {
+      position: fixed;
+      width: 12px; height: 12px;
+      background: var(--pulse);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 40px; height: 40px;
+      border: 1px solid rgba(232,255,71,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: left 0.12s ease, top 0.12s ease, width 0.3s ease, height 0.3s ease;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      mix-blend-mode: normal;
+    }
+    nav::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.95), transparent);
+      pointer-events: none;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.12em;
+      color: var(--white);
+      text-decoration: none;
+      position: relative;
+    }
+    .nav-logo span { color: var(--pulse); }
+    /* logo fix */
+    .nav-links { display: flex; gap: 36px; position: relative; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta {
+      position: relative;
+      background: var(--pulse);
+      color: var(--black) !important;
+      padding: 8px 20px;
+      font-weight: 500 !important;
+      color: var(--black);
+      transition: background 0.2s, transform 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--white) !important; transform: scale(1.04); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(232,255,71,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(232,255,71,0.04) 0%, transparent 60%);
+    }
+
+    .hero-ticker {
+      position: absolute; top: 48%; left: 0; right: 0;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(100px, 18vw, 260px);
+      color: rgba(255,255,255,0.03);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      user-select: none;
+      animation: ticker 18s linear infinite;
+    }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    .hero-eyebrow {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--pulse);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 9vw, 130px);
+      line-height: 0.92;
+      letter-spacing: 0.02em;
+      max-width: 900px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s forwards;
+    }
+    .hero-headline em {
+      font-style: normal;
+      color: var(--pulse);
+      display: inline-block;
+    }
+
+    .hero-sub {
+      margin-top: 32px;
+      max-width: 480px;
+      font-size: 1rem;
+      line-height: 1.7;
+      color: rgba(245,242,236,0.65);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.6s forwards;
+    }
+
+    .hero-actions {
+      margin-top: 48px;
+      display: flex; gap: 16px; align-items: center;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .btn-primary {
+      background: var(--pulse);
+      color: var(--black);
+      padding: 14px 36px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { background: var(--white); transform: translateY(-2px); }
+
+    .btn-ghost {
+      color: var(--white);
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      transition: gap 0.2s;
+    }
+    .btn-ghost:hover { gap: 16px; }
+    .btn-ghost::after { content: '→'; font-size: 1rem; }
+
+    .hero-badges {
+      position: absolute; right: 48px; bottom: 80px;
+      display: flex; flex-direction: column; gap: 12px; align-items: flex-end;
+      opacity: 0;
+      animation: fadeUp 0.9s 1s forwards;
+    }
+    .badge {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .badge::before { content: ''; width: 20px; height: 1px; background: var(--pulse); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MARQUEE STRIP */
+    .strip {
+      border-top: 1px solid var(--mid);
+      border-bottom: 1px solid var(--mid);
+      overflow: hidden;
+      padding: 16px 0;
+      background: var(--dim);
+    }
+    .strip-inner {
+      display: flex; gap: 48px;
+      white-space: nowrap;
+      animation: marquee 20s linear infinite;
+    }
+    .strip-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      display: flex; align-items: center; gap: 48px;
+    }
+    .strip-item span { color: var(--pulse); font-size: 1.2rem; }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* INTRO SECTION */
+    .intro {
+      padding: 120px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+      border-bottom: 1px solid var(--mid);
+    }
+    .intro-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--pulse);
+      margin-bottom: 24px;
+    }
+    .intro-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 5vw, 72px);
+      line-height: 1;
+      letter-spacing: 0.03em;
+    }
+    .intro-body {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: rgba(245,242,236,0.65);
+    }
+    .intro-stat {
+      display: flex; flex-direction: column;
+      margin-top: 48px;
+      padding-top: 48px;
+      border-top: 1px solid var(--mid);
+      gap: 32px;
+    }
+    .stat-row { display: flex; gap: 48px; }
+    .stat { display: flex; flex-direction: column; }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 3.5rem;
+      color: var(--pulse);
+      line-height: 1;
+    }
+    .stat-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 4px; }
+
+    /* SERVICES */
+    .services {
+      padding: 120px 48px;
+    }
+    .section-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 72px;
+      border-bottom: 1px solid var(--mid);
+      padding-bottom: 32px;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--pulse);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 4vw, 60px);
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+    .section-note { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--mid);
+      border: 1px solid var(--mid);
+    }
+
+    .service-card {
+      background: var(--black);
+      padding: 48px 40px;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.3s;
+      cursor: none;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--pulse);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .service-card:hover { background: var(--dim); }
+    .service-card:hover::before { transform: scaleX(1); }
+
+    .service-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.2em;
+      color: var(--pulse);
+      margin-bottom: 32px;
+      opacity: 0.7;
+    }
+    .service-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 0.05em;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .service-desc {
+      font-size: 0.875rem;
+      line-height: 1.7;
+      color: rgba(245,242,236,0.55);
+    }
+    .service-arrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 32px;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s, gap 0.2s;
+    }
+    .service-card:hover .service-arrow { color: var(--pulse); gap: 14px; }
+    .service-arrow::after { content: '→'; }
+
+    /* CTA BAND */
+    .cta-band {
+      margin: 0 48px;
+      background: var(--pulse);
+      padding: 72px 80px;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-band::after {
+      content: 'PURE PULSE';
+      position: absolute; right: -20px; top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10rem;
+      color: rgba(0,0,0,0.06);
+      letter-spacing: 0.1em;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .cta-band-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 4vw, 60px);
+      color: var(--black);
+      line-height: 1;
+      letter-spacing: 0.03em;
+    }
+    .cta-band-sub {
+      font-size: 0.9rem;
+      color: rgba(8,8,8,0.65);
+      margin-top: 12px;
+      max-width: 360px;
+    }
+    .btn-dark {
+      background: var(--black);
+      color: var(--pulse);
+      padding: 16px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.2s;
+      flex-shrink: 0;
+    }
+    .btn-dark:hover { background: #111; transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer {
+      padding: 72px 48px 40px;
+      border-top: 1px solid var(--mid);
+      margin-top: 80px;
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 64px;
+      gap: 40px;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.1em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .footer-logo span { color: var(--pulse); }
+    .footer-tagline { font-size: 0.85rem; color: var(--muted); margin-top: 8px; }
+    .footer-links { display: flex; gap: 64px; }
+    .footer-col h4 {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--pulse);
+      margin-bottom: 20px;
+    }
+    .footer-col a {
+      display: block;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      margin-bottom: 10px;
+      transition: color 0.2s;
+    }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      border-top: 1px solid var(--mid);
+      padding-top: 32px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .footer-bottom a { color: var(--muted); text-decoration: none; }
+    .footer-bottom a:hover { color: var(--white); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hero { padding: 0 24px 60px; }
+      .hero-badges { display: none; }
+      .intro { grid-template-columns: 1fr; padding: 72px 24px; gap: 48px; }
+      .services { padding: 72px 24px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .cta-band { margin: 0 24px; padding: 48px 32px; flex-direction: column; }
+      footer { padding: 48px 24px 32px; }
+      .footer-top { flex-direction: column; }
+      .footer-links { flex-wrap: wrap; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">PurePulse</a>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="nav-cta">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-ticker">PURE PULSE &nbsp; PURE PULSE &nbsp; PURE PULSE &nbsp; PURE PULSE &nbsp;</div>
+
+    <p class="hero-eyebrow">Pakistan's Boldest Marketing & PR Agency</p>
+    <h1 class="hero-headline">
+      Marketing &amp; PR<br/>
+      that moves at the<br/>
+      speed of <em>pulse.</em>
+    </h1>
+    <p class="hero-sub">
+      Helping ambitious brands win attention, shape reputation, and grow revenue through performance marketing and modern public relations.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Start a Project</a>
+      <a href="#services" class="btn-ghost">View Services</a>
+    </div>
+
+    <div class="hero-badges">
+      <div class="badge">Performance Marketing</div>
+      <div class="badge">Public Relations</div>
+      <div class="badge">Based in Pakistan</div>
+    </div>
+  </section>
+
+  <!-- MARQUEE STRIP -->
+  <div class="strip">
+    <div class="strip-inner">
+      <div class="strip-item">Public Relations <span>✦</span></div>
+      <div class="strip-item">Performance Marketing <span>✦</span></div>
+      <div class="strip-item">Social & Creators <span>✦</span></div>
+      <div class="strip-item">Digital PR <span>✦</span></div>
+      <div class="strip-item">Brand & Content <span>✦</span></div>
+      <div class="strip-item">Reputation <span>✦</span></div>
+      <!-- duplicate for seamless loop -->
+      <div class="strip-item">Public Relations <span>✦</span></div>
+      <div class="strip-item">Performance Marketing <span>✦</span></div>
+      <div class="strip-item">Social & Creators <span>✦</span></div>
+      <div class="strip-item">Digital PR <span>✦</span></div>
+      <div class="strip-item">Brand & Content <span>✦</span></div>
+      <div class="strip-item">Reputation <span>✦</span></div>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <section class="intro" id="about">
+    <div>
+      <p class="intro-label">Who We Are</p>
+      <h2 class="intro-title">Ambitious Brands Deserve Bolder Thinking.</h2>
+    </div>
+    <div>
+      <p class="intro-body">
+        PurePulse is a Pakistan‑based agency built for brands that refuse to blend in. We combine the strategic rigour of traditional PR with the speed and precision of performance marketing — so your story reaches the right people at exactly the right moment.
+      </p>
+      <div class="intro-stat">
+        <div class="stat-row">
+          <div class="stat"><span class="stat-num">6+</span><span class="stat-label">Service Lines</span></div>
+          <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Outcome Focused</span></div>
+          <div class="stat"><span class="stat-num">PK</span><span class="stat-label">Pakistan Based</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="section-header">
+      <div>
+        <p class="section-label">What We Do</p>
+        <h2 class="section-title">Full‑Funnel Services,<br/>Outcome‑Focused.</h2>
+      </div>
+      <span class="section-note">6 Service Lines</span>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <p class="service-num">01</p>
+        <h3 class="service-name">Public Relations</h3>
+        <p class="service-desc">Media strategy, press office, thought leadership, and crisis communications — protecting and amplifying your voice where it matters most.</p>
+        <a href="#contact" class="service-arrow">Explore</a>
+      </div>
+      <div class="service-card">
+        <p class="service-num">02</p>
+        <h3 class="service-name">Social & Creators</h3>
+        <p class="service-desc">Paid & organic social, influencer programs, and UGC engines that build communities and convert audiences into customers.</p>
+        <a href="#contact" class="service-arrow">Explore</a>
+      </div>
+      <div class="service-card">
+        <p class="service-num">03</p>
+        <h3 class="service-name">Performance Marketing</h3>
+        <p class="service-desc">Search, paid social, CRO, analytics & attribution — every rupee tracked, every campaign optimised for measurable growth.</p>
+        <a href="#contact" class="service-arrow">Explore</a>
+      </div>
+      <div class="service-card">
+        <p class="service-num">04</p>
+        <h3 class="service-name">Digital PR</h3>
+        <p class="service-desc">Linkable assets, newsjacking, and newsroom SEO that build authority, earn coverage, and drive organic traffic at scale.</p>
+        <a href="#contact" class="service-arrow">Explore</a>
+      </div>
+      <div class="service-card">
+        <p class="service-num">05</p>
+        <h3 class="service-name">Brand & Content</h3>
+        <p class="service-desc">Positioning, messaging, content design & production — giving your brand a distinct voice that cuts through the noise.</p>
+        <a href="#contact" class="service-arrow">Explore</a>
+      </div>
+      <div class="service-card">
+        <p class="service-num">06</p>
+        <h3 class="service-name">Reputation</h3>
+        <p class="service-desc">Monitoring, reviews, employee advocacy, and policy — ensuring your brand's reputation is an asset, never a liability.</p>
+        <a href="#contact" class="service-arrow">Explore</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <div class="cta-band" id="contact">
+    <div>
+      <h2 class="cta-band-title">Ready to Move<br/>at the Speed of Pulse?</h2>
+      <p class="cta-band-sub">Tell us about your brand and let's build something that wins attention and grows revenue.</p>
+    </div>
+    <a href="/cdn-cgi/l/email-protection#9ff7faf3f3f0dfefeaedfaefeaf3ecfab1eff4" class="btn-dark">Get in Touch →</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-top">
+      <div>
+        <a href="#" class="footer-logo">PurePulse</a>
+        <p class="footer-tagline">Marketing & PR that moves at the speed of pulse.</p>
+        <p class="footer-tagline" style="margin-top:6px;">Karachi, Pakistan</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Services</h4>
+          <a href="#services">Public Relations</a>
+          <a href="#services">Social & Creators</a>
+          <a href="#services">Performance Marketing</a>
+          <a href="#services">Digital PR</a>
+          <a href="#services">Brand & Content</a>
+          <a href="#services">Reputation</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#about">About</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 PurePulse. All rights reserved.</span>
+      <span>Pakistan's boldest marketing & PR agency.</span>
+    </div>
+  </footer>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    // Custom cursor
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+      ring.style.left   = e.clientX + 'px';
+      ring.style.top    = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '20px'; cursor.style.height = '20px';
+        ring.style.width = '60px'; ring.style.height = '60px';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '12px'; cursor.style.height = '12px';
+        ring.style.width = '40px'; ring.style.height = '40px';
+      });
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.service-card, .intro, .cta-band').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'tran
