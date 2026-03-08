@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Services — PurePulse</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -370,32 +371,11 @@
     .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.7s ease, transform 0.7s ease; }
     .reveal.hidden { opacity: 0; transform: translateY(32px); }
   </style>
+  <script src="components.js"></script>
 </head>
 <body>
 
-  <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html" onclick="closeMenu()">Home</a>
-    <a href="about.html" onclick="closeMenu()">About</a>
-    <a href="services.html" onclick="closeMenu()">Services</a>
-    <a href="contact.html" onclick="closeMenu()">Contact</a>
-    <a href="contact.html" class="mobile-cta" onclick="closeMenu()">Get Started</a>
-  </div>
-
-  <!-- NAV -->
-  <nav>
-    <a href="index.html" class="nav-logo">PurePulse</a>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="services.html" class="active">Services</a>
-      <a href="contact.html">Contact</a>
-      <a href="contact.html" class="nav-cta">Get Started</a>
-    </div>
-    <button class="hamburger" id="hamburger" onclick="toggleMenu()">
-      <span></span><span></span><span></span>
-    </button>
-  </nav>
+  <div id="nav-placeholder"></div>
 
   <!-- PAGE HERO -->
   <section class="page-hero">
@@ -763,49 +743,11 @@
   </div>
 
   <!-- FOOTER -->
-  <footer>
-    <div class="footer-top">
-      <div>
-        <a href="index.html" class="footer-logo">PurePulse</a>
-        <p class="footer-tagline">Marketing & PR that moves at the speed of pulse.</p>
-        <p class="footer-tagline" style="margin-top:6px;">Karachi, Pakistan</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Pages</h4>
-          <a href="index.html">Home</a>
-          <a href="about.html">About</a>
-          <a href="services.html">Services</a>
-          <a href="contact.html">Contact</a>
-        </div>
-        <div class="footer-col">
-          <h4>Services</h4>
-          <a href="services.html">Public Relations</a>
-          <a href="services.html">Performance Marketing</a>
-          <a href="services.html">Social & Creators</a>
-          <a href="services.html">Digital PR</a>
-          <a href="services.html">Brand & Content</a>
-          <a href="services.html">Reputation</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 PurePulse. All rights reserved.</span>
-      <span>Pakistan's boldest marketing & PR agency.</span>
-    </div>
-  </footer>
+  <div id="footer-placeholder"></div>
 
   <script>
-    function toggleMenu() {
-      document.getElementById('hamburger').classList.toggle('open');
-      document.getElementById('mobileMenu').classList.toggle('open');
-      document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('open') ? 'hidden' : '';
-    }
-    function closeMenu() {
-      document.getElementById('hamburger').classList.remove('open');
-      document.getElementById('mobileMenu').classList.remove('open');
-      document.body.style.overflow = '';
-    }
+    
+    
     document.querySelectorAll('.reveal').forEach(el => {
       el.style.opacity = '0';
       el.style.transform = 'translateY(32px)';
@@ -820,6 +762,24 @@
       });
     }, { threshold: 0.05 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+  <script>
+    renderSEO('services.html');
+    renderNav('services.html');
+    renderFooter();
+    initScrollReveal();
+  </script>
+
+</html>
+
+  <script>
+    renderSEO('services.html');
+    renderNav('services.html');
+    renderFooter();
+    renderWhatsApp();
+    renderBackToTop();
+    initScrollReveal();
   </script>
 
 </body>
