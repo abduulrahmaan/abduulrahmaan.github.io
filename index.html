@@ -25,30 +25,7 @@
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
       overflow-x: hidden;
-      cursor: none;
-    }
-
-    /* Custom cursor */
-    .cursor {
-      position: fixed;
-      width: 12px; height: 12px;
-      background: var(--pulse);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease;
-      mix-blend-mode: difference;
-    }
-    .cursor-ring {
-      position: fixed;
-      width: 40px; height: 40px;
-      border: 1px solid rgba(232,255,71,0.4);
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9998;
-      transform: translate(-50%, -50%);
-      transition: left 0.12s ease, top 0.12s ease, width 0.3s ease, height 0.3s ease;
+      cursor: auto;
     }
 
     /* NAV */
@@ -319,7 +296,7 @@
       position: relative;
       overflow: hidden;
       transition: background 0.3s;
-      cursor: none;
+      cursor: auto;
     }
     .service-card::before {
       content: '';
@@ -481,9 +458,6 @@
 </head>
 <body>
 
-  <div class="cursor" id="cursor"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
-
   <!-- NAV -->
   <nav>
     <a href="#" class="nav-logo">PurePulse</a>
@@ -616,7 +590,7 @@
       <h2 class="cta-band-title">Ready to Move<br/>at the Speed of Pulse?</h2>
       <p class="cta-band-sub">Tell us about your brand and let's build something that wins attention and grows revenue.</p>
     </div>
-    <a href="/cdn-cgi/l/email-protection#9ff7faf3f3f0dfefeaedfaefeaf3ecfab1eff4" class="btn-dark">Get in Touch →</a>
+    <a href="/cdn-cgi/l/email-protection#7b0f131e0b0e09081e0b0e17081e3b1c161a121755181416" class="btn-dark">Get in Touch →</a>
   </div>
 
   <!-- FOOTER -->
@@ -650,27 +624,7 @@
     </div>
   </footer>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    // Custom cursor
-    const cursor = document.getElementById('cursor');
-    const ring = document.getElementById('cursorRing');
-    document.addEventListener('mousemove', e => {
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top  = e.clientY + 'px';
-      ring.style.left   = e.clientX + 'px';
-      ring.style.top    = e.clientY + 'px';
-    });
-    document.querySelectorAll('a, button').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        cursor.style.width = '20px'; cursor.style.height = '20px';
-        ring.style.width = '60px'; ring.style.height = '60px';
-      });
-      el.addEventListener('mouseleave', () => {
-        cursor.style.width = '12px'; cursor.style.height = '12px';
-        ring.style.width = '40px'; ring.style.height = '40px';
-      });
-    });
-
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // Scroll reveal
     const observer = new IntersectionObserver(entries => {
       entries.forEach(e => {
@@ -679,8 +633,4 @@
           e.target.style.transform = 'translateY(0)';
         }
       });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.service-card, .intro, .cta-band').forEach(el => {
-      el.style.opacity = '0';
-      el.style.transform = 'tran
+    }, { threshold:
